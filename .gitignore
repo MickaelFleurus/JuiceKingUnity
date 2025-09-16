@@ -1,0 +1,96 @@
+# =============== #
+# Unity Generated #
+# =============== #
+
+[Ll]ibrary/
+[Tt]emp/
+[Oo]bj/
+[Bb]uild/
+[Bb]uilds/
+[Ll]ogs/
+[Mm]emoryCaptures/
+UserSettings/
+DerivedData/
+
+# IDE-specific
+.vscode/
+.idea/
+*.csproj
+*.unityproj
+*.sln
+*.suo
+*.tmp
+*.user
+*.userprefs
+*.pidb
+*.booproj
+*.svd
+*.pdb
+*.opendb
+*.VC.db
+
+# Crash reports
+sysinfo.txt
+
+# Unity cache & auto-generated files
+*.unitypackage
+*.apk
+*.aab
+*.xcuserstate
+*.xcworkspace
+xcuserdata/
+*.ipa
+
+# Other
+*.DS_Store
+*.swp
+*.swm
+*.swn
+*.swo
+
+# Packed Addressables and StreamingAssets
+/[Aa]ssets/[Aa]ddressableAssetsData/*
+/[Aa]ssets/[Ss]treamingAssets/aa/*
+/[Aa]ssets/[Ss]treamingAssets/aa.meta
+
+# Rider plugin stuff
+.idea/
+
+# Build output
+[Bb]uilds*/
+[Bb]uild/
+
+# Generated lighting and GI data
+/[Aa]ssets/**/Lightmap-*/
+LightmapSnapshot/
+LightingData.asset
+
+# Local test results
+/[Tt]estResults*/
+
+# Crash handler log
+*.stacktrace
+
+# Burst cache
+[Bb]urstCache/
+
+# JetBrains Rider plugin
+/[Pp]lugins/Editor/JetBrains*.*
+
+# Temporary auto-generated Android Gradle files
+.gradle/
+gradle.properties
+local.properties
+*.keystore
+
+# VS Code settings
+.vscode/
+
+# Playmode tests result
+*.playmodeTestResults
+
+# Rider settings folder
+.idea/
+
+# Cache for unity package manager
+/[Uu]serSettings/Layouts/

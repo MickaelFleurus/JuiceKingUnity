@@ -1,0 +1,86 @@
+{
+    "version": 1,
+    "name": "PlayerMovements",
+    "maps": [
+        {
+            "name": "InGame",
+            "id": "38c1f29f-bd39-44b8-8396-b633769ca858",
+            "actions": [
+                {
+                    "name": "PressAndHold",
+                    "type": "Button",
+                    "id": "1813a488-6a09-475a-b38f-1b47a3be753c",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "81424842-0c5d-4ee5-8d3f-e2ce6ecdbbde",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "PressAndHold",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "b83903d3-0e87-4ced-be1c-c561e96b459c",
+                    "path": "<Touchscreen>/primaryTouch/tap",
+                    "interactions": "Hold",
+                    "processors": "",
+                    "groups": "",
+                    "action": "PressAndHold",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        },
+        {
+            "name": "Debug",
+            "id": "115bc452-4d11-411e-ab50-dc06199138a6",
+            "actions": [
+                {
+                    "name": "ResetPlayerPosition",
+                    "type": "Button",
+                    "id": "7284cbe4-a39c-446e-a2a3-9ce9d5c77569",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "9cf83708-0de0-4d1c-93b4-721d7fee5a81",
+                    "path": "<Keyboard>/r",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "ResetPlayerPosition",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        }
+    ],
+    "controlSchemes": [
+        {
+            "name": "Pointer (Mouse/Touch)",
+            "bindingGroup": "Pointer (Mouse/Touch)",
+            "devices": [
+                {
+                    "devicePath": "<Pointer>",
+                    "isOptional": false,
+                    "isOR": false
+                }
+            ]
+        }
+    ]
+}
