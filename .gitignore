@@ -14,6 +14,7 @@ DerivedData/
 
 # IDE-specific
 .vscode/
+.vs/*
 .idea/
 *.csproj
 *.unityproj
@@ -40,6 +41,8 @@ sysinfo.txt
 *.xcworkspace
 xcuserdata/
 *.ipa
+*/_Recovery*
+mono_crash*
 
 # Other
 *.DS_Store
