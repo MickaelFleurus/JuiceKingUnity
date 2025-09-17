@@ -4,14 +4,11 @@ using UnityEngine.InputSystem;
 public class PlayerMovementHandler : MonoBehaviour
 {
     private PlayerMovements mPlayerMovement;
-
-
     // Chainsaw
-    [SerializeField]
-    private GameObject mChainsaw;
+    [SerializeField] private GameObject mChainsaw;
 
     // Movement
-    private bool mIsPressing;
+    private bool mIsPressing = false;
     private Vector2 mInitialPosition;
     public float mMoveSpeed = 5f;
 
@@ -74,11 +71,10 @@ public class PlayerMovementHandler : MonoBehaviour
             moveDirectionNorm.Normalize();
             transform.Translate(moveDirectionNorm * mMoveSpeed * Time.deltaTime);
 
-            if (mChainsaw.activeSelf)
+            float angle = Vector2.SignedAngle(Vector2.up, moveDirectionNorm);
+            transform.localScale = new Vector3( Mathf.Sign(angle),1f, 1f);
+            if (mChainsaw.activeSelf && moveDirectionNorm != Vector2.zero)
             {
-                float angle = Vector2.SignedAngle(Vector2.up, moveDirectionNorm);
-
-                // Set the rotation of the chainsaw around the Z axis
                 mChainsaw.transform.rotation = Quaternion.Euler(0, 0, angle);
             }
         }
