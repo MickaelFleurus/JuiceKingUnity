@@ -1,78 +1,60 @@
-// 9/17/2025 AI-Tag
-// This was created with the help of Assistant, a Unity Artificial Intelligence product.
-
-using System;
-using UnityEditor;
 using UnityEngine;
-using UnityEngine.UI;
-using UnityEngine.InputSystem;
 
 public class DynamicJoystick : MonoBehaviour
 {
-    private PlayerMovements mPlayerMovement;
+    [SerializeField] private PlayerInputHandler PlayerInputHandler;
     public RectTransform joystickBackground;
     public RectTransform joystickHandle;
     public Canvas canvas;
-
     private Vector2 joystickStartPosition;
-    private bool mIsPressing = false;
 
-    private void Start()
+
+    private void Awake()
     {
-        mPlayerMovement = new PlayerMovements();
         joystickBackground.gameObject.SetActive(false);
-        mPlayerMovement.InGame.PressAndHold.performed += OnPressPerformed;
-        mPlayerMovement.InGame.PressAndHold.canceled += OnPressCanceled;
-        mPlayerMovement.InGame.PressAndHold.Enable();
+        PlayerInputHandler.OnPressStarted += OnPressPerformed;
+        PlayerInputHandler.OnPressAndHoldUpdate += OnPressAndHoldUpdate;
+        PlayerInputHandler.OnPressEnded += OnPressCanceled;
     }
 
-    public void OnPressPerformed(InputAction.CallbackContext context)
+    private void OnDestroy()
     {
-        Vector2 touchPosition = Pointer.current.position.ReadValue();
+        PlayerInputHandler.OnPressStarted -= OnPressPerformed;
+        PlayerInputHandler.OnPressAndHoldUpdate -= OnPressAndHoldUpdate;
+        PlayerInputHandler.OnPressEnded -= OnPressCanceled;
+    }
 
-        // Convert screen position to canvas position
+    public void OnPressPerformed(Vector2 touchPosition)
+    {
         RectTransformUtility.ScreenPointToLocalPointInRectangle(
-            canvas.transform as RectTransform,
-            touchPosition,
-            canvas.worldCamera,
-            out joystickStartPosition
-        );
-
-        // Position the joystick and make it visible
-        joystickBackground.anchoredPosition = joystickStartPosition;
-        joystickBackground.gameObject.SetActive(true);
-        mIsPressing = true;
-    
-    }
-
-    private void Update()
-    {
-        if (mIsPressing)
-        {
-            Vector2 touchPosition = Pointer.current.position.ReadValue();
-
-            // Convert screen position to canvas position
-            RectTransformUtility.ScreenPointToLocalPointInRectangle(
                 canvas.transform as RectTransform,
                 touchPosition,
                 canvas.worldCamera,
-                out Vector2 joystickPosition
+                out joystickStartPosition
             );
 
-            // Calculate the direction and clamp the handle within the background
-            Vector2 direction = joystickPosition - joystickStartPosition;
-            float radius = joystickBackground.sizeDelta.x / 2;
-            direction = Vector2.ClampMagnitude(direction, radius);
-
-            joystickHandle.anchoredPosition = direction;
-        }
+        joystickBackground.anchoredPosition = joystickStartPosition;
+        joystickBackground.gameObject.SetActive(true);
     }
 
-    public void OnPressCanceled(InputAction.CallbackContext context)
+    private void OnPressAndHoldUpdate(Vector2 position, Vector2 direction, float angle)
     {
-        // Reset and hide the joystick
+        Vector2 localPosition;
+        RectTransformUtility.ScreenPointToLocalPointInRectangle(
+                canvas.transform as RectTransform,
+                position,
+                canvas.worldCamera,
+                out localPosition
+            );
+        Vector2 localDirection = localPosition - joystickStartPosition;
+        float radius = joystickBackground.sizeDelta.x / 2;
+        localDirection = Vector2.ClampMagnitude(localDirection, radius);
+        joystickHandle.anchoredPosition = localDirection;
+    }
+
+    public void OnPressCanceled()
+    {
         joystickHandle.anchoredPosition = Vector2.zero;
         joystickBackground.gameObject.SetActive(false);
-        mIsPressing = false;
     }
 }

@@ -1,23 +1,19 @@
 using System;
-using System.Collections.Generic;
 
 [System.Serializable] // Makes the class visible in the Inspector if used in a MonoBehaviour
 public class PlayerInventory
 {
-    private Dictionary<InventoryKey, int> mStorage;
-    public int mCapacity { get; private set; }
+    private GameData.PlayerInventoryData PlayerInventoryData;
 
-    public PlayerInventory(int capacity)
+    public PlayerInventory(GameData.PlayerInventoryData playerInventoryData)
     {
-        mCapacity = capacity;
-        mStorage = new Dictionary<InventoryKey, int>();
-
+        PlayerInventoryData = playerInventoryData;
         foreach (EItemType itemType in Enum.GetValues(typeof(EItemType)))
         {
             foreach (EFruitType fruitType in Enum.GetValues(typeof(EFruitType)))
             {
-                var key = new InventoryKey(itemType, fruitType);
-                mStorage[key] = 0;
+                var key = new FullProductId(itemType, fruitType);
+                PlayerInventoryData.content[key] = 0;
             }
         }
     }
@@ -27,47 +23,47 @@ public class PlayerInventory
     private int GetTotalItemCount()
     {
         int total = 0;
-        foreach (var count in mStorage.Values)
+        foreach (var count in PlayerInventoryData.content.Values)
         {
             total += count;
         }
         return total;
     }
 
-    public bool AddItem(InventoryKey item, int count)
+    public bool AddItem(FullProductId item, int count)
     {
         int currentItemCount = GetTotalItemCount();
-        if (currentItemCount == mCapacity || count <= 0)
+        if (currentItemCount >= PlayerInventoryData.capacity || count <= 0)
         {
             return false;
         }
 
-        if (currentItemCount + count > mCapacity)
+        if (currentItemCount + count > PlayerInventoryData.capacity)
         {
-            count = mCapacity - currentItemCount;
+            count = PlayerInventoryData.capacity - currentItemCount;
         }
 
-        mStorage[item] += count;
+        PlayerInventoryData.content[item] += count;
         return true;
     }
 
-    public bool HasItem(InventoryKey inventoryKey) => mStorage[inventoryKey] > 0;
-    public bool IsFull() => GetTotalItemCount() >= mCapacity;
+    public bool HasItem(FullProductId inventoryKey) => PlayerInventoryData.content[inventoryKey] > 0;
+    public bool IsFull() => GetTotalItemCount() >= PlayerInventoryData.capacity;
 
-    public bool IncrementItem(InventoryKey item)
+    public bool IncrementItem(FullProductId item)
     {
         if (IsFull())
         {
             return false;
         }
-        mStorage[item]++;
+        PlayerInventoryData.content[item]++;
         return true;
     }
 
-    public bool DecrementItem(InventoryKey item)
+    public bool DecrementItem(FullProductId item)
     {
-        if (mStorage[item] <= 0) { return false; }
-        mStorage[item]--;
+        if (PlayerInventoryData.content[item] <= 0) { return false; }
+        PlayerInventoryData.content[item]--;
         return true;
     }
 }

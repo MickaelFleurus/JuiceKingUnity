@@ -2,24 +2,28 @@
 using System;
 using UnityEngine;
 
+
+[System.Serializable]
 public enum EItemType
 {
     Raw, Juice, Jelly
 }
+
+[System.Serializable]
 public enum EFruitType
 {
     Apple, Orange, Pineapple
 }
 
 [System.Serializable]
-public class InventoryKey
+public class FullProductId
 {
     [SerializeField]
     public EItemType item;
     [SerializeField]
     public EFruitType fruit;
 
-    public InventoryKey(EItemType Item, EFruitType Fruit)
+    public FullProductId(EItemType Item, EFruitType Fruit)
     {
         item = Item;
         fruit = Fruit;
@@ -27,7 +31,7 @@ public class InventoryKey
 
     public override bool Equals(object obj)
     {
-        if (obj is not InventoryKey other)
+        if (obj is not FullProductId other)
         {
             return false;
         }

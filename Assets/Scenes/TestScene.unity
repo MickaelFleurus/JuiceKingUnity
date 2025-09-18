@@ -130,6 +130,7 @@ GameObject:
   - component: {fileID: 90391704}
   - component: {fileID: 90391703}
   - component: {fileID: 90391702}
+  - component: {fileID: 90391705}
   m_Layer: 0
   m_Name: EventSystem
   m_TagString: Untagged
@@ -198,6 +199,18 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &90391705
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 90391701}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 75c81defb92d3884f89889354f5d7f39, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerInputHandler
 --- !u!1 &371495950
 GameObject:
   m_ObjectHideFlags: 0
@@ -441,7 +454,7 @@ Camera:
   far clip plane: 1000
   field of view: 34
   orthographic: 1
-  orthographic size: 5
+  orthographic size: 20
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -645,6 +658,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aa1a5ce71152448d0bbb506ff78690af, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DynamicJoystick
+  PlayerInputHandler: {fileID: 90391705}
   joystickBackground: {fileID: 944536336}
   joystickHandle: {fileID: 1968923896}
   canvas: {fileID: 2136455766}
@@ -653,6 +667,37 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 1479598938610290953, guid: cf02cf75b6b51114294937999564fabb, type: 3}
   m_PrefabInstance: {fileID: 3143405493418008168}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1439377803
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1439377804}
+  m_Layer: 0
+  m_Name: Enemy
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1439377804
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1439377803}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 474.71024, y: 100.2991, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1968923895
 GameObject:
   m_ObjectHideFlags: 0
@@ -830,6 +875,50 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!1 &2143010499
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2143010501}
+  - component: {fileID: 2143010500}
+  m_Layer: 0
+  m_Name: DataSystem
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &2143010500
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2143010499}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6a1e71350a3d9d3449622cf32baa4ee3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GameStatsManager
+--- !u!4 &2143010501
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2143010499}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 481.15762, y: 103.72263, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &3143405493418008168
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -854,6 +943,14 @@ PrefabInstance:
       propertyPath: mChainsaw
       value: 
       objectReference: {fileID: 1254723603}
+    - target: {fileID: 4607537129937346258, guid: cf02cf75b6b51114294937999564fabb, type: 3}
+      propertyPath: GameStatsManager
+      value: 
+      objectReference: {fileID: 2143010500}
+    - target: {fileID: 4607537129937346258, guid: cf02cf75b6b51114294937999564fabb, type: 3}
+      propertyPath: PlayerInputHandler
+      value: 
+      objectReference: {fileID: 90391705}
     - target: {fileID: 4621274144290669675, guid: cf02cf75b6b51114294937999564fabb, type: 3}
       propertyPath: m_LocalPosition.x
       value: 477
@@ -1055,3 +1152,5 @@ SceneRoots:
   - {fileID: 371495952}
   - {fileID: 2136455769}
   - {fileID: 90391704}
+  - {fileID: 1439377804}
+  - {fileID: 2143010501}

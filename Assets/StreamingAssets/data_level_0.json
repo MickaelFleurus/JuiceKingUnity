@@ -1,0 +1,39 @@
+{
+    "stands": {
+        "Raw_Apple": {
+            "basePrice": 100,
+            "basePreparationDuration": 5
+        },
+        "Juice_Orange": {
+            "basePrice": 150,
+            "basePreparationDuration": 7
+        },
+        "Jelly_Pineapple": {
+            "basePrice": 200,
+            "basePreparationDuration": 10
+        }
+    },
+    "fruits": {
+        "Apple": {
+            "speed": 10,
+            "rareSpawnProbability": 5,
+            "agressivityRate": 2,
+            "bigVersionlootMultiplicator": 1.5,
+            "loot": 3
+        },
+        "Orange": {
+            "speed": 8,
+            "rareSpawnProbability": 3,
+            "agressivityRate": 1,
+            "bigVersionlootMultiplicator": 1.2,
+            "loot": 2
+        },
+        "Pineapple": {
+            "speed": 6,
+            "rareSpawnProbability": 1,
+            "agressivityRate": 3,
+            "bigVersionlootMultiplicator": 2.0,
+            "loot": 4
+        }
+    }
+}

@@ -1,16 +1,14 @@
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 public class PlayerMovementHandler : MonoBehaviour
 {
-    private PlayerMovements mPlayerMovement;
+    [SerializeField] private PlayerInputHandler PlayerInputHandler;
+    [SerializeField] private GameStatsManager GameStatsManager;
     // Chainsaw
     [SerializeField] private GameObject mChainsaw;
 
     // Movement
-    private bool mIsPressing = false;
-    private Vector2 mInitialPosition;
-    public float mMoveSpeed = 5f;
+    [SerializeField] private float mMoveSpeed = 5f;
 
     // Interaction
     private float mInteractionDuration = 0f;
@@ -18,66 +16,34 @@ public class PlayerMovementHandler : MonoBehaviour
     private GameObject mCurrentInteractionObject;
 
     // Player inventory
-    private PlayerInventory mInventory = new PlayerInventory(50);
+    private PlayerInventory mInventory;
 
     private void Awake()
     {
-        mPlayerMovement = new PlayerMovements();
+        mInventory = new PlayerInventory(GameStatsManager.Data.playerInventory);
         mChainsaw.SetActive(false);
     }
 
     private void OnEnable()
     {
-        mPlayerMovement.InGame.PressAndHold.performed += OnPressPerformed;
-        mPlayerMovement.InGame.PressAndHold.canceled += OnPressCanceled;
-        mPlayerMovement.InGame.PressAndHold.Enable();
-
-
-        mPlayerMovement.Debug.ResetPlayerPosition.performed += OnResetPressed;
-        mPlayerMovement.Debug.ResetPlayerPosition.Enable();
+        PlayerInputHandler.OnPressAndHoldUpdate += OnPressAndHoldUpdate;
     }
-    private void OnResetPressed(InputAction.CallbackContext context)
-    {
-        transform.position = Vector3.zero;
-    }
+
 
     private void OnDisable()
     {
-        mPlayerMovement.InGame.PressAndHold.performed -= OnPressPerformed;
-        mPlayerMovement.InGame.PressAndHold.canceled -= OnPressCanceled;
-        mPlayerMovement.InGame.PressAndHold.Disable();
-
-        mPlayerMovement.Debug.ResetPlayerPosition.performed -= OnResetPressed;
-        mPlayerMovement.Debug.ResetPlayerPosition.Disable();
+        PlayerInputHandler.OnPressAndHoldUpdate -= OnPressAndHoldUpdate;
     }
 
-    private void OnPressPerformed(InputAction.CallbackContext context)
+    private void OnPressAndHoldUpdate(Vector2 position, Vector2 direction, float angle)
     {
-        mIsPressing = true;
-        mInitialPosition = Pointer.current.position.ReadValue();
-    }
-
-    private void OnPressCanceled(InputAction.CallbackContext context)
-    {
-        mIsPressing = false;
-    }
-
-    private void Update()
-    {
-        if (mIsPressing) // Only process movement if the player is pressing
+        transform.Translate(direction * mMoveSpeed * Time.deltaTime);
+        transform.localScale = new Vector3(Mathf.Sign(angle), 1f, 1f);
+        if (mChainsaw.activeSelf)
         {
-            Vector2 currentPosition = Pointer.current.position.ReadValue();
-            Vector2 moveDirectionNorm = currentPosition - mInitialPosition;
-            moveDirectionNorm.Normalize();
-            transform.Translate(moveDirectionNorm * mMoveSpeed * Time.deltaTime);
-
-            float angle = Vector2.SignedAngle(Vector2.up, moveDirectionNorm);
-            transform.localScale = new Vector3( Mathf.Sign(angle),1f, 1f);
-            if (mChainsaw.activeSelf && moveDirectionNorm != Vector2.zero)
-            {
-                mChainsaw.transform.rotation = Quaternion.Euler(0, 0, angle);
-            }
+            mChainsaw.transform.rotation = Quaternion.Euler(0, 0, angle);
         }
+
 
         if (mCurrentInteractionObject != null)
         {
@@ -143,7 +109,7 @@ public class PlayerMovementHandler : MonoBehaviour
         }
     }
 
-    public bool ReceiveItem(InventoryKey item)
+    public bool ReceiveItem(FullProductId item)
     {
         bool added = mInventory.AddItem(item, 1);
         if (added)

@@ -3,14 +3,10 @@ using UnityEngine;
 
 public class Shelf : MonoBehaviour
 {
-    [SerializeField]
-    private EFruitType FruitType;
-    [SerializeField]
-    private EItemType ResultType;
-    [SerializeField]
-    private PlayerMovementHandler Player;
-    [SerializeField]
-    private float RawToProductDuration = 5f;
+    [SerializeField] private EFruitType FruitType;
+    [SerializeField] private EItemType ResultType;
+    [SerializeField] private PlayerMovementHandler Player;
+    [SerializeField] private float RawToProductDuration = 5f;
     private float CurrentProcessingTime = 0f;
 
     private bool IsInteractingWithPlayer = false;
@@ -18,14 +14,14 @@ public class Shelf : MonoBehaviour
     private float CooldownDuration = 0.5f;
 
     private Dictionary<EItemType, int> ItemCount = new Dictionary<EItemType, int>();
-    private readonly InventoryKey inventoryKey;
+    private FullProductId inventoryKey;
 
-    public Shelf()
+    public void Awake()
     {
         ItemCount[EItemType.Raw] = 0;
         ItemCount[EItemType.Juice] = 0;
         ItemCount[EItemType.Jelly] = 0;
-        inventoryKey = new InventoryKey(ResultType, FruitType);
+        inventoryKey = new FullProductId(ResultType, FruitType);
     }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
