@@ -356,6 +356,7 @@ GameObject:
   - component: {fileID: 371495952}
   - component: {fileID: 371495951}
   - component: {fileID: 371495953}
+  - component: {fileID: 371495954}
   m_Layer: 0
   m_Name: FruitArea
   m_TagString: FruitArea
@@ -482,6 +483,21 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &371495954
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 371495950}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0e1a601865a20d2498b0082d453393a3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FruitSpawer
+  FruitType: 0
+  FruitPrefab: {fileID: 3695501932621894475, guid: d5034745c5c8fd846aec94da8e5951fb, type: 3}
+  SchedulerManager: {fileID: 1374079247}
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
@@ -840,37 +856,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1439377803
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1439377804}
-  m_Layer: 0
-  m_Name: Enemy
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1439377804
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1439377803}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 474.71024, y: 100.2991, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1968923895
 GameObject:
   m_ObjectHideFlags: 0
@@ -1176,6 +1161,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
+    - target: {fileID: 8107040339875050481, guid: cf02cf75b6b51114294937999564fabb, type: 3}
+      propertyPath: m_TagString
+      value: Player
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
@@ -1275,6 +1264,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 612047761982582668, guid: dec492c83bee75c4c936b3849d1b6ad2, type: 3}
       insertIndex: -1
       addedObject: {fileID: 0}
+    - targetCorrespondingSourceObject: {fileID: 1918513400151941894, guid: dec492c83bee75c4c936b3849d1b6ad2, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 0}
   m_SourcePrefab: {fileID: 100100000, guid: dec492c83bee75c4c936b3849d1b6ad2, type: 3}
 --- !u!1001 &8652754062465887114
 PrefabInstance:
@@ -1344,6 +1336,5 @@ SceneRoots:
   - {fileID: 371495952}
   - {fileID: 1374079248}
   - {fileID: 90391704}
-  - {fileID: 1439377804}
   - {fileID: 2143010501}
   - {fileID: 182858721}
