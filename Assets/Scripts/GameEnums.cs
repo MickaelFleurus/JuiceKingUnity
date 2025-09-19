@@ -16,6 +16,12 @@ public enum EFruitType
 }
 
 [System.Serializable]
+public enum EStandType
+{
+    Mixer, MixerFinishedProduct, StoreShelf
+}
+
+[System.Serializable]
 public class FullProductId
 {
     [SerializeField]
@@ -43,3 +49,32 @@ public class FullProductId
         return HashCode.Combine(item, fruit);
     }
 }
+
+
+[System.Serializable]
+public class StandId
+{
+    [SerializeField]
+    public EStandType StandType;
+    [SerializeField]
+    public FullProductId ProductId;
+    public StandId(EStandType standType, FullProductId productId)
+    {
+        StandType = standType;
+        ProductId = productId;
+    }
+
+    public override bool Equals(object obj)
+    {
+        if (obj is not StandId other)
+        {
+            return false;
+        }
+        return StandType == other.StandType && ProductId == other.ProductId;
+    }
+    public override int GetHashCode()
+    {
+        return HashCode.Combine(StandType, ProductId);
+    }
+}
+

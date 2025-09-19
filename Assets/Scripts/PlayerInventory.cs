@@ -20,7 +20,7 @@ public class PlayerInventory
 
 
 
-    private int GetTotalItemCount()
+    public int GetTotalItemCount()
     {
         int total = 0;
         foreach (var count in PlayerInventoryData.content.Values)

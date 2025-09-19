@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class PlayerMovementHandler : MonoBehaviour
+public class PlayerController : MonoBehaviour, ITriggeredParent
 {
     [SerializeField] private PlayerInputHandler PlayerInputHandler;
     [SerializeField] private GameStatsManager GameStatsManager;
@@ -9,59 +9,79 @@ public class PlayerMovementHandler : MonoBehaviour
 
     // Movement
     [SerializeField] private float mMoveSpeed = 5f;
+    private Vector2 mDirection;
 
     // Interaction
-    private float mInteractionDuration = 0f;
     private float mRequiredInteractionTime = 2f;
     private GameObject mCurrentInteractionObject;
+    private FruitMixer mCurrentFruitMixer = null;
+    private Scheduler.ScheduledTask mStandInteractionScheduled = null;
+    private Scheduler.ScheduledTask mFruitMixerInteractionScheduled = null;
+
+    // Scheduler
+    [SerializeField] private SchedulerManager SchedulerManager;
+    private Scheduler Scheduler;
 
     // Player inventory
     private PlayerInventory mInventory;
+    [SerializeField] private AmountTextHandler InventoryAmount;
+
+    [SerializeField] private GameObject PlayerLookGO;
 
     private void Awake()
     {
+        Scheduler = SchedulerManager.CreateScheduler(this);
         mInventory = new PlayerInventory(GameStatsManager.Data.playerInventory);
         mChainsaw.SetActive(false);
+        RefreshInventoryCount();
     }
 
     private void OnEnable()
     {
         PlayerInputHandler.OnPressAndHoldUpdate += OnPressAndHoldUpdate;
+        PlayerInputHandler.OnPressEnded += OnPressEnded;
     }
-
 
     private void OnDisable()
     {
         PlayerInputHandler.OnPressAndHoldUpdate -= OnPressAndHoldUpdate;
+        PlayerInputHandler.OnPressEnded -= OnPressEnded;
+    }
+    private void Update()
+    {
+        transform.Translate(mDirection * mMoveSpeed * Time.deltaTime);
+    }
+
+    private void OnPressEnded()
+    {
+        mDirection = Vector2.zero;
     }
 
     private void OnPressAndHoldUpdate(Vector2 position, Vector2 direction, float angle)
     {
-        transform.Translate(direction * mMoveSpeed * Time.deltaTime);
-        transform.localScale = new Vector3(Mathf.Sign(angle), 1f, 1f);
-        if (mChainsaw.activeSelf)
+        mDirection = direction;
+        float signAngle = Mathf.Sign(angle);
+        if (signAngle != PlayerLookGO.transform.localScale.x)
         {
-            mChainsaw.transform.rotation = Quaternion.Euler(0, 0, angle);
+            PlayerLookGO.transform.localScale = new Vector3(signAngle, 1f, 1f);
         }
+        mChainsaw.transform.rotation = Quaternion.Euler(0, 0, angle);
+    }
 
-
-        if (mCurrentInteractionObject != null)
+    private void InteractWithMixer()
+    {
+        if (mCurrentFruitMixer != null)
         {
-            if (mInteractionDuration >= mRequiredInteractionTime)
+            if (mInventory.HasItem(mCurrentFruitMixer.rawProductId))
             {
-                if ((bool)(mCurrentInteractionObject.GetComponent<Interactible>()?.Interact()))
-                {
-                    mCurrentInteractionObject = null; // Clear current interaction object after successful interaction
-                }
-            }
-            else
-            {
-                mInteractionDuration += Time.deltaTime;
+                mCurrentFruitMixer.ReceiveRawItem();
+                mInventory.DecrementItem(mCurrentFruitMixer.rawProductId);
+                RefreshInventoryCount();
             }
         }
     }
 
-    private void OnTriggerEnter2D(Collider2D other)
+    public void OnChildTriggerEnter(Collider2D other)
     {
         if (other.CompareTag("StandInteraction"))
         {
@@ -69,16 +89,17 @@ public class PlayerMovementHandler : MonoBehaviour
             if (mCurrentInteractionObject == null)
             {
                 mCurrentInteractionObject = other.gameObject;
-                mInteractionDuration = 0f; // Reset interaction duration for new object
+                mStandInteractionScheduled = Scheduler.Schedule(mRequiredInteractionTime, () => { Debug.Log("Interact with the object pls"); mStandInteractionScheduled = null; });
             }
         }
         else if (other.CompareTag("Shelf"))
         {
             Debug.Log("Entered interaction zone of " + other.name);
-            Shelf shelf = other.gameObject.GetComponent<Shelf>();
-            if (shelf != null)
+            mCurrentFruitMixer = other.gameObject.GetComponentInParent<FruitMixer>();
+            if (mCurrentFruitMixer != null)
             {
-                shelf.StartInteract();
+                mCurrentFruitMixer.StartInteract(this);
+                mFruitMixerInteractionScheduled = Scheduler.ScheduleRepeating(0.2f, InteractWithMixer);
             }
         }
         else if (other.CompareTag("FruitArea"))
@@ -87,7 +108,7 @@ public class PlayerMovementHandler : MonoBehaviour
         }
     }
 
-    private void OnTriggerExit2D(Collider2D other)
+    public void OnChildTriggerExit(Collider2D other)
     {
         Debug.Log("Exited interaction zone of " + other.name);
         if (other.CompareTag("StandInteraction") && mCurrentInteractionObject == other.gameObject)
@@ -96,11 +117,11 @@ public class PlayerMovementHandler : MonoBehaviour
         }
         else if (other.CompareTag("Shelf"))
         {
-            Debug.Log("Entered interaction zone of " + other.name);
-            Shelf shelf = other.gameObject.GetComponent<Shelf>();
-            if (shelf != null)
+            if (mCurrentFruitMixer != null)
             {
-                shelf.StopInteract();
+                mCurrentFruitMixer.StopInteract();
+                mFruitMixerInteractionScheduled.Cancel();
+                mFruitMixerInteractionScheduled = null;
             }
         }
         else if (other.CompareTag("FruitArea"))
@@ -115,11 +136,14 @@ public class PlayerMovementHandler : MonoBehaviour
         if (added)
         {
             Debug.Log($"Added {item.fruit} {item.item} to inventory.");
+            RefreshInventoryCount();
         }
-        else
-        {
-            Debug.Log("Failed to add item to inventory. Inventory might be full.");
-        }
+
         return added;
+    }
+
+    private void RefreshInventoryCount()
+    {
+        InventoryAmount.UpdateAmount(mInventory.GetTotalItemCount());
     }
 }
